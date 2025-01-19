@@ -24,7 +24,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     private SQLiteDatabase db;
 
-    private DataBaseHandler(Context context)
+    public DataBaseHandler(Context context)
     {
         super(context,Name,null,VERSION);
     }
@@ -90,7 +90,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         cv.put(STATUS,status);
         db.update(TODO_TABLE,cv,ID + "=?", new String[]{String.valueOf(id)});
     }
-    public void UpdateTask(int id, int task)
+    public void UpdateTask(int id, String task)
     {
         ContentValues cv = new ContentValues();
         cv.put(TASK,task);

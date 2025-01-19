@@ -25,7 +25,6 @@
         android:layout_below="@+id/newTaskText"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="8dp"
-        android:background="@color/purple_200"
         android:text="Save"
         android:textAllCaps="false"
         android:textSize="16dp">
