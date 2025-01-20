@@ -1,6 +1,8 @@
 package com.example.todolist.Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,7 +47,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         {
             @Override
             public void onClick(View v) {
-                DeleteItem(holder. getAdapterPosition());
+                DeleteItemWithDialog(holder.getAdapterPosition());
             }
         });
         holder.task.setText(item.getTask());
@@ -81,6 +84,25 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         this.toDoModelList = toDoModelList;
         notifyDataSetChanged();
     }
+    public void  DeleteItemWithDialog(int position)
+    {
+        //Create dialog
+        AlertDialog.Builder deleteItemDialog = new AlertDialog.Builder(getContext());
+        deleteItemDialog.setTitle("Delete");
+        deleteItemDialog.setMessage("Delete this task?");
+        deleteItemDialog.setIcon(R.drawable.baseline_auto_delete_red);
+        deleteItemDialog.setPositiveButton("Yes",new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DeleteItem(position);
+            }
+        });
+        deleteItemDialog.setNegativeButton("No", (dialog, which) -> {
+            // Dialog will close automatically
+        });
+        deleteItemDialog.create().show();
+    }
     public void DeleteItem(int position) {
         ToDoModel item = toDoModelList.get(position);
         Log.i("Adapter","item index: " + item.getId());
@@ -101,7 +123,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     public static class  ViewHolder extends RecyclerView.ViewHolder
     {
         CheckBox task;
-        Button deleteButton;
+        ImageButton deleteButton;
         ViewHolder(View view)
         {
             super(view);

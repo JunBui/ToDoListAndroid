@@ -7,27 +7,29 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/taskText"
+    <EditText
+        android:id="@+id/taskTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints="Task"
         android:textStyle="bold"
-        android:text="Tasks"
         android:textColor="@color/black"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
+        android:hint="Task"
         android:textSize="32sp">
-    </TextView>
+    </EditText>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/taskRecycleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/taskText"
+        android:layout_below="@id/taskTitle"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:nestedScrollingEnabled="true"
         >
     </androidx.recyclerview.widget.RecyclerView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

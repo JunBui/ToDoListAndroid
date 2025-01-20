@@ -24,15 +24,22 @@
             android:padding="13dp">
         </CheckBox>
 
-        <Button
+        <ImageButton
             android:id="@+id/deleteToDoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/toDoCheckBox"
+            android:layout_alignBottom="@+id/toDoCheckBox"
             android:layout_alignParentEnd="true"
-            android:padding="13dp"
-            android:text="Delete">
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:padding="15dp"
+            android:src="@drawable/baseline_auto_delete_24"
+            android:backgroundTint="@color/red"
+            android:contentDescription="deletetask"
+            >
 
-        </Button>
+        </ImageButton>
 
     </RelativeLayout>
 
