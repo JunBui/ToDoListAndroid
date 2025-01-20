@@ -1,8 +1,11 @@
 package com.example.todolist.Adapters;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todolist.MainActivity;
@@ -51,22 +55,34 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
             }
         });
         holder.task.setText(item.getTask());
-        holder.task.setChecked(IntToBoolean(item.getStatus()));
         holder.task.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 Log.i("Adapter","check item index: " + item.getId());
-                if(b)
-                {
-                    db.UpdateStatus(item.getId(),1);
-                }
-                else
-                {
-                    db.UpdateStatus(item.getId(),0);
-                }
+                OnChecked(holder.task,item.getId(),b);
             }
         });
+        holder.task.setChecked(IntToBoolean(item.getStatus()));
+        OnCheckBoxUiChange(holder.task,item.getId(),IntToBoolean(item.getStatus()));
+    }
+    private void OnChecked(CheckBox checkBox, int index, boolean enable)
+    {
+        db.UpdateStatus(index,enable?1:0);
+        OnCheckBoxUiChange(checkBox,index,enable);
+    }
+    private void OnCheckBoxUiChange(CheckBox checkBox, int index, boolean enable)
+    {
+        if(enable)
+        {
+            checkBox.setTextColor(ContextCompat.getColor(getContext(), R.color.gray));
+            checkBox.setPaintFlags(checkBox.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        else
+        {
+            checkBox.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            checkBox.setPaintFlags(0);
+        }
     }
     public int getItemCount()
     {
