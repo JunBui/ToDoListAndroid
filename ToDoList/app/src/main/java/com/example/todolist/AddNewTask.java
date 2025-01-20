@@ -1,4 +1,4 @@
-package com.example.todolist.Utils;
+package com.example.todolist;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -17,9 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.example.todolist.DialogCloseListener;
 import com.example.todolist.Models.ToDoModel;
-import com.example.todolist.R;
+import com.example.todolist.Utils.DataBaseHandler;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class AddNewTask extends BottomSheetDialogFragment
@@ -32,6 +31,12 @@ public class AddNewTask extends BottomSheetDialogFragment
     {
         return new AddNewTask();
     }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstance)
     {
@@ -41,13 +46,11 @@ public class AddNewTask extends BottomSheetDialogFragment
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         newTaskText = getView().findViewById(R.id.newTaskText);
         newTaskSaveButton = getView().findViewById(R.id.newTaskButton);
 
-        db = new DataBaseHandler(getActivity());
-        db.openDatabase();
 
         boolean isUpdate = false;
         final  Bundle bundle = getArguments();
@@ -61,6 +64,8 @@ public class AddNewTask extends BottomSheetDialogFragment
                 newTaskSaveButton.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
             }
         }
+        db = new DataBaseHandler(getActivity());
+        db.openDatabase();
         newTaskText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,6 +105,7 @@ public class AddNewTask extends BottomSheetDialogFragment
                     ToDoModel task = new ToDoModel();
                     task.setTask(text);
                     task.setStatus(0);
+                    db.insertTask(task);
                 }
                 dismiss();
             }

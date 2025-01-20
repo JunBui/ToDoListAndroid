@@ -10,12 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todolist.Adapters.ToDoAdapter;
 import com.example.todolist.Models.ToDoModel;
-import com.example.todolist.Utils.AddNewTask;
 import com.example.todolist.Utils.DataBaseHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

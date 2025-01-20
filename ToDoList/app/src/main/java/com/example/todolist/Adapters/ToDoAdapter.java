@@ -1,9 +1,12 @@
 package com.example.todolist.Adapters;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
@@ -12,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.todolist.MainActivity;
 import com.example.todolist.Models.ToDoModel;
 import com.example.todolist.R;
-import com.example.todolist.Utils.AddNewTask;
+import com.example.todolist.AddNewTask;
 import com.example.todolist.Utils.DataBaseHandler;
 
 import java.util.List;
@@ -35,12 +38,22 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder,int pos)
     {
         db.openDatabase();
-        ToDoModel item = toDoModelList.get(pos);
+        final ToDoModel item = toDoModelList.get(pos);
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                DeleteItem(holder. getAdapterPosition());
+            }
+        });
         holder.task.setText(item.getTask());
         holder.task.setChecked(IntToBoolean(item.getStatus()));
         holder.task.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                Log.i("Adapter","check item index: " + item.getId());
                 if(b)
                 {
                     db.UpdateStatus(item.getId(),1);
@@ -60,10 +73,20 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     {
         return n!=0;
     }
+    public Context getContext() {
+        return mainActivity;
+    }
     public void SetTask(List<ToDoModel> toDoModelList)
     {
         this.toDoModelList = toDoModelList;
         notifyDataSetChanged();
+    }
+    public void DeleteItem(int position) {
+        ToDoModel item = toDoModelList.get(position);
+        Log.i("Adapter","item index: " + item.getId());
+        db.DeleteTask(item.getId());
+        toDoModelList.remove(position);
+        notifyItemRemoved(position);
     }
     public void EditItem(int pos)
     {
@@ -78,10 +101,12 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     public static class  ViewHolder extends RecyclerView.ViewHolder
     {
         CheckBox task;
+        Button deleteButton;
         ViewHolder(View view)
         {
             super(view);
             task = view.findViewById(R.id.toDoCheckBox);
+            deleteButton = view.findViewById(R.id.deleteToDoButton);
         }
     }
 }
