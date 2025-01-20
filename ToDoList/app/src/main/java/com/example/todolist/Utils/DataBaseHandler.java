@@ -19,8 +19,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     static final String ID = "id";
     static final String TASK = "task";
     static final String STATUS = "status";
-    static final String CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEER PRIMARY KEY AUTOINCREMENT, "
-            + TASK + "TEXT, " + STATUS + " INTERGER)";
+    static final String CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + TASK + "TEXT, " + STATUS + " INTEGER)";
 
     private SQLiteDatabase db;
 
