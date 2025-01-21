@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     @Override
     public void handleDialogClose(DialogInterface dialog) {
         taskParent = SaveManager.getInstance(MyApplication.getAppContext()).GetAllTask();
-        Log.i("MainActivity","Dialog close on main activity ");
         taskParentAdapter.SetTask(taskParent);
         taskParentAdapter.notifyDataSetChanged();
     }

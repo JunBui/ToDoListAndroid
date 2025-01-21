@@ -14,16 +14,9 @@
         android:layout_height="match_parent"
         android:background="@color/yellow_note">
 
-        <Button
-            android:id="@+id/taskParentButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible"
-            >
-
-        </Button>
 
         <TextView
+            android:layout_margin="8dp"
             android:id="@+id/taskParentText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,6 +43,32 @@
             app:layout_constraintTop_toTopOf="parent">
 
         </TextView>
+
+        <ImageView
+            android:id="@+id/taskCompletedImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/baseline_check"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/taskModifyDateText"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <Button
+            android:id="@+id/taskParentButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:clickable="true"
+            android:contentDescription="hallo"
+            >
+
+        </Button>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -18,8 +18,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.example.todolist.Utils.DataBaseHandler;
 import com.example.todolist.Utils.SaveManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AddNewTaskParent extends BottomSheetDialogFragment
 {
@@ -30,6 +34,7 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
     {
         return new AddNewTaskParent();
     }
+    private DataBaseHandler db;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,11 +82,13 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
         newTaskSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(Tag,"Save New Task Parent");
                 String text = newTaskText.getText().toString();
                 SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
                 int saveId = saveManager.GetCurrentTaskParentId();
-                saveManager.SaveTaskParent(saveId,text);
+                saveManager.SaveTaskParentName(saveId,text);
+                saveManager.SaveTaskParentModifyTime(saveId);
+                db = new DataBaseHandler(MyApplication.getAppContext(),saveId);
+                db.CheckExistAndCreateNewTable(saveId);
                 saveManager.GainCurrentTaskParentId();
                 dismiss();
             }

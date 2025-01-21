@@ -3,12 +3,17 @@ package com.example.todolist.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todolist.MainActivity;
@@ -46,6 +51,21 @@ public class TaskParentAdapter extends RecyclerView.Adapter<TaskParentAdapter.Vi
             }
         });
         holder.taskText.setText(item.Text);
+        holder.taskModifyDateText.setText(item.ModifyTime);
+        OnTaskParentUiChange(holder,item.IsCompleted);
+    }
+
+    private void OnTaskParentUiChange(ViewHolder holder, boolean enable)
+    {
+        holder.taskCompletedImage.setEnabled(enable);
+        if(enable)
+        {
+            holder.taskText.setPaintFlags(holder.taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        else
+        {
+            holder.taskText.setPaintFlags(0);
+        }
     }
     public int getItemCount()
     {
@@ -64,12 +84,14 @@ public class TaskParentAdapter extends RecyclerView.Adapter<TaskParentAdapter.Vi
         Button taskButton;
         TextView taskText;
         TextView taskModifyDateText;
+        ImageView taskCompletedImage;
         ViewHolder(View view)
         {
             super(view);
             taskButton = view.findViewById(R.id.taskParentButton);
             taskText = view.findViewById(R.id.taskParentText);
             taskModifyDateText = view.findViewById(R.id.taskModifyDateText);
+            taskCompletedImage = view.findViewById(R.id.taskCompletedImage);
         }
     }
 }

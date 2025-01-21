@@ -69,8 +69,6 @@ public class AddNewTask extends BottomSheetDialogFragment
 //        }
         db = new DataBaseHandler(getActivity(),getArguments().getInt("receivedId", -1));
         db.openDatabase();
-
-        Log.i("Add new task","init table: " + getArguments().getInt("receivedId", -1));
         newTaskText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -104,7 +102,6 @@ public class AddNewTask extends BottomSheetDialogFragment
                 ToDoModel task = new ToDoModel();
                 task.setTask(text);
                 task.setStatus(0);
-                Log.i("Add new task","Add task click: " + text);
                 db.insertTask(task);
                 dismiss();
             }

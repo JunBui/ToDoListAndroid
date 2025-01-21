@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.example.todolist.MainActivity;
 import com.example.todolist.Models.ToDoModel;
+import com.example.todolist.ToDoListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     {
         super(context,Name,null,VERSION);
         TODO_TABLE_Id = id;
-        TODO_TABLE +=TODO_TABLE_Id;
+        TODO_TABLE = "todoTable_" + TODO_TABLE_Id;
         Log.i("database","To do table name: " + TODO_TABLE);
     }
     @Override
@@ -51,7 +52,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         // Create tables again
         onCreate(db);
     }
-    public void  openDatabase()
+    public void openDatabase()
     {
         db = this.getWritableDatabase();
     }
@@ -74,10 +75,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         List<ToDoModel> taskList = new ArrayList<>();
         Cursor cur = null;
         db.beginTransaction();
+        Log.i("database","query: " + TODO_TABLE);
         try{
             cur = db.query(TODO_TABLE, null, null, null, null, null, null, null);
-
-            Log.i("database","query: " + TODO_TABLE);
             if(cur != null){
                 if(cur.moveToFirst()){
                     do{
@@ -96,12 +96,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             assert cur != null;
             cur.close();
         }
-        Log.i("data base get all task","task size: " + taskList.size());
 
-        for(int i = 0; i< taskList.size();i++)
-        {
-            Log.i("data base get all task","task name: " + taskList.get(i).getTask());
-        }
         return taskList;
     }
     public void UpdateStatus(int id, int status)
@@ -120,18 +115,16 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     {
         db.delete(TODO_TABLE,ID + "= ?",new String[]{String.valueOf(id)});
     }
-    public boolean doesDatabaseExist(Context context, String dbName) {
-        SQLiteDatabase checkDB = null;
-        try {
-            String dbPath = context.getDatabasePath(dbName).getPath();
-            checkDB = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY);
-        } catch (SQLiteException e) {
-            // Database doesn't exist
-        } finally {
-            if (checkDB != null) {
-                checkDB.close();
-            }
-        }
-        return checkDB != null;
+    public void CheckExistAndCreateNewTable(int id)
+    {
+        TODO_TABLE_Id = id;
+        TODO_TABLE = "todoTable_" + TODO_TABLE_Id;
+        CREATE_TODO_TABLE = "CREATE TABLE IF NOT EXISTS " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TASK + " TEXT, "
+                + STATUS + " INTEGER)";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Execute the query
+        db.execSQL(CREATE_TODO_TABLE);
+        db.close();
     }
 }

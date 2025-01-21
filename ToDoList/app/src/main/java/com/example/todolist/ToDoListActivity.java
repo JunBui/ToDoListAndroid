@@ -35,12 +35,7 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
     private DataBaseHandler db;
     private List<ToDoModel> taskList;
     private EditText ToDoListTitle;
-    public static ToDoListActivity newInstance()
-    {
-        return new ToDoListActivity();
-    }
     public int receivedId;
-    public String defaultName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,20 +100,33 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
 
     private void LoadTitle()
     {
-        String savedText = SaveManager.getInstance(MyApplication.getAppContext()).GetTaskParent(receivedId); // Default value is an empty string
+        String savedText = SaveManager.getInstance(MyApplication.getAppContext()).GetTaskParentName(receivedId); // Default value is an empty string
         ToDoListTitle.setText(savedText);
 
     }
     private void SaveTitle()
     {
         SaveManager.getInstance(MyApplication.getAppContext())
-                .SaveTaskParent(receivedId,ToDoListTitle.getText().toString());
+                .SaveTaskParentName(receivedId,ToDoListTitle.getText().toString());
     }
     @Override
     public void handleDialogClose(DialogInterface dialog) {
         taskList = db.GetAllTasks();
         taskAdapter.SetTask(taskList);
         taskAdapter.notifyDataSetChanged();
-        Log.i("To do list activity: ", "table when handle dialog close: " + db.TODO_TABLE);
+    }
+    
+    public void CheckAllItem()
+    {
+        SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
+        taskList = db.GetAllTasks();
+        for (ToDoModel n1: taskList) {
+            if (n1.getStatus() == 0) {
+                saveManager.SaveTaskParentCompleted(receivedId,false);
+                return;
+            }
+        }
+
+        saveManager.SaveTaskParentCompleted(receivedId,true);
     }
 }

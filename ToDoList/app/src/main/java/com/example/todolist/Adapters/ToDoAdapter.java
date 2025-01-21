@@ -16,11 +16,13 @@ import android.widget.ImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todolist.MyApplication;
 import com.example.todolist.ToDoListActivity;
 import com.example.todolist.Models.ToDoModel;
 import com.example.todolist.R;
 import com.example.todolist.AddNewTask;
 import com.example.todolist.Utils.DataBaseHandler;
+import com.example.todolist.Utils.SaveManager;
 
 import java.util.List;
 
@@ -66,6 +68,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private void OnChecked(CheckBox checkBox, int index, boolean enable)
     {
         db.UpdateStatus(index,enable?1:0);
+        SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
+        saveManager.SaveTaskParentModifyTime(toDoListActivity.receivedId);
+        toDoListActivity.CheckAllItem();
         OnCheckBoxUiChange(checkBox,index,enable);
     }
     private void OnCheckBoxUiChange(CheckBox checkBox, int index, boolean enable)
@@ -95,10 +100,6 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     public void SetTask(List<ToDoModel> toDoModelList)
     {
         this.toDoModelList = toDoModelList;
-        for(int i = 0; i< toDoModelList.size();i++)
-        {
-            Log.i("To do adapter","task name: " + this.toDoModelList.get(i).getTask());
-        }
         notifyDataSetChanged();
     }
     public void  DeleteItemWithDialog(int position)
@@ -125,6 +126,8 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         Log.i("Adapter","item index: " + item.getId());
         db.DeleteTask(item.getId());
         toDoModelList.remove(position);
+        SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
+        saveManager.SaveTaskParentModifyTime(toDoListActivity.receivedId);
         notifyItemRemoved(position);
     }
     public void EditItem(int pos)

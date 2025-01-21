@@ -3,6 +3,8 @@ package com.example.todolist.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,22 +70,45 @@ public class SaveManager {
         editor.clear();
         editor.apply();
     }
-    public void SaveTaskParent(int id, String name)
+    public void SaveTaskParentName(int id, String name)
     {
         saveString("taskParentName_"+id,name);
     }
-    public String GetTaskParent(int id)
+    public void SaveTaskParentModifyTime(int id)
+    {
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM");
+        String formattedDate = currentDate.format(formatter);
+        saveString("taskParentModifyTime_"+id,formattedDate);
+    }
+    public void SaveTaskParentCompleted(int id,boolean completed)
+    {
+        saveBoolean("taskParentIsCompleted"+id,completed);
+    }
+    public String GetTaskParentName(int id)
     {
         String taskParentName = getString("taskParentName_"+id,"");
         return taskParentName;
+    }
+    public String GetTaskParentModifyTime(int id)
+    {
+        String taskParentModifyName = getString("taskParentModifyTime_"+id,"");
+        return taskParentModifyName;
+    }
+    public boolean GetTaskParentIsCompleted(int id)
+    {
+        boolean taskParentIsCompleted = getBoolean("taskParentIsCompleted"+id,false);
+        return taskParentIsCompleted;
     }
     public List<ToDoParentList> GetAllTask()
     {
         List<ToDoParentList> allTaskParent = new ArrayList<>();
         for (int i = 0; i<GetCurrentTaskParentId();i++)
         {
-            ToDoParentList parentName = new ToDoParentList("",i);
-            parentName.Text = instance.GetTaskParent(i);
+            ToDoParentList parentName = new ToDoParentList(i,
+                    instance.GetTaskParentName(i),
+                    instance.GetTaskParentModifyTime(i),
+                    instance.GetTaskParentIsCompleted(i));
             if(parentName.Text != null && !parentName.Text.trim().isEmpty())
             {
                 allTaskParent.add(parentName);
