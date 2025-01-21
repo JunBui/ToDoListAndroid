@@ -15,23 +15,31 @@ import java.util.List;
 public class DataBaseHandler extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String Name = "toDoListDatabase";
-    private static final String TODO_TABLE = "todoTable";
+    private String TODO_TABLE = "todoTable_";
+    public int TODO_TABLE_Id=0;
     private static final String ID = "id";
     private static final String TASK = "task";
     private static final String STATUS = "status";
-    private static final String CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TASK + " TEXT, "
+    private String CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TASK + " TEXT, "
             + STATUS + " INTEGER)";
 
     private SQLiteDatabase db;
 
-    public DataBaseHandler(Context context)
+
+    public DataBaseHandler(Context context, int id)
     {
         super(context,Name,null,VERSION);
+        TODO_TABLE_Id = id;
+        TODO_TABLE +=TODO_TABLE_Id;
+        Log.i("database","To do table name: " + TODO_TABLE);
     }
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+        CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TASK + " TEXT, "
+                + STATUS + " INTEGER)";
         db.execSQL(CREATE_TODO_TABLE);
+        Log.i("database","To do table at create: " + TODO_TABLE);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVer, int newVer)
@@ -60,11 +68,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
     public List<ToDoModel> GetAllTasks()
     {
+        onUpgrade(db,db.getVersion(),db.getVersion()+1);
         List<ToDoModel> taskList = new ArrayList<>();
         Cursor cur = null;
         db.beginTransaction();
         try{
             cur = db.query(TODO_TABLE, null, null, null, null, null, null, null);
+
+            Log.i("database","query: " + TODO_TABLE);
             if(cur != null){
                 if(cur.moveToFirst()){
                     do{
@@ -101,4 +112,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     {
         db.delete(TODO_TABLE,ID + "= ?",new String[]{String.valueOf(id)});
     }
+//    public void createTableIfNotExists() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TASK + " TEXT, "
+//                + STATUS + " INTEGER)";
+//        db.execSQL(CREATE_TODO_TABLE);
+//    }
 }

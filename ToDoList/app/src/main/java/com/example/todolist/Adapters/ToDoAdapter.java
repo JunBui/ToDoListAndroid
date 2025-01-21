@@ -1,17 +1,14 @@
 package com.example.todolist.Adapters;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -19,7 +16,7 @@ import android.widget.ImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todolist.MainActivity;
+import com.example.todolist.ToDoListActivity;
 import com.example.todolist.Models.ToDoModel;
 import com.example.todolist.R;
 import com.example.todolist.AddNewTask;
@@ -29,13 +26,13 @@ import java.util.List;
 
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     private List<ToDoModel> toDoModelList;
-    private MainActivity mainActivity;
+    private ToDoListActivity toDoListActivity;
     private DataBaseHandler db;
 
-    public ToDoAdapter(DataBaseHandler db,MainActivity activity)
+    public ToDoAdapter(DataBaseHandler db, ToDoListActivity activity)
     {
         this.db =db;
-        this.mainActivity = activity;
+        this.toDoListActivity = activity;
     }
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -93,7 +90,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         return n!=0;
     }
     public Context getContext() {
-        return mainActivity;
+        return toDoListActivity;
     }
     public void SetTask(List<ToDoModel> toDoModelList)
     {
@@ -134,7 +131,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
         bundle.putString("task",item.getTask());
         AddNewTask fragment = new AddNewTask();
         fragment.setArguments(bundle);
-        fragment.show(mainActivity.getSupportFragmentManager(),AddNewTask.Tag);
+        fragment.show(toDoListActivity.getSupportFragmentManager(),AddNewTask.Tag);
     }
     public static class  ViewHolder extends RecyclerView.ViewHolder
     {

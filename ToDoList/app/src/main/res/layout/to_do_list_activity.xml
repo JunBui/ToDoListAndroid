@@ -2,50 +2,64 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/toDoListParent"
+    android:id="@+id/toDoList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context=".ToDoListActivity">
 
-    <TextView
+    <ImageButton
+        android:id="@+id/backButtonToDoList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="15dp"
+        android:src="@drawable/baseline_arrow_back"
+        android:contentDescription="hallo"
+        android:backgroundTint="@android:color/black"
+        >
+
+    </ImageButton>
+
+    <EditText
         android:id="@+id/taskTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:autofillHints="Task"
-        android:text="Tung To Do List"
+        android:hint="Task"
         android:textColor="@color/black"
-        android:textSize="32sp"
+        android:textSize="27sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-    </TextView>
+        app:layout_constraintStart_toEndOf="@+id/backButtonToDoList"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+    </EditText>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/taskRecycleViewParent"
+        android:id="@+id/taskRecycleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/taskTitle"
         android:nestedScrollingEnabled="true"
+        android:layout_margin="12dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskTitle"
-        android:layout_margin="10dp">
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <ImageButton
-        android:id="@+id/addTaskButtonParent"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
+    <Button
+        android:id="@+id/addTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:background="@drawable/baseline_add_circle_24"
-        android:backgroundTint="@android:color/holo_blue_bright"
-        android:contentDescription="hallo"
+        android:text="Add task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-    </ImageButton>
+    </Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

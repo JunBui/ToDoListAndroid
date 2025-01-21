@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +18,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.example.todolist.Models.ToDoModel;
-import com.example.todolist.Utils.DataBaseHandler;
+import com.example.todolist.Utils.SaveManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class AddNewTask extends BottomSheetDialogFragment
+public class AddNewTaskParent extends BottomSheetDialogFragment
 {
-    public static final String Tag = "ActionBottomDialogNewTask";
+    public static final String Tag = "ActionBottomDialogNewTaskParent";
     private EditText newTaskText;
     private Button newTaskSaveButton;
-    private DataBaseHandler db;
-    public static AddNewTask newInstance()
+    public static AddNewTaskParent newInstance()
     {
-        return new AddNewTask();
+        return new AddNewTaskParent();
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,21 +49,6 @@ public class AddNewTask extends BottomSheetDialogFragment
         newTaskText = getView().findViewById(R.id.newTaskText);
         newTaskSaveButton = getView().findViewById(R.id.newTaskButton);
 
-
-        boolean isUpdate = false;
-        final  Bundle bundle = getArguments();
-        if(bundle !=null)
-        {
-            isUpdate = true;
-            String task = bundle.getString("task");
-            newTaskText.setText(task);
-            if(task.length()>0)
-            {
-                newTaskSaveButton.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
-            }
-        }
-        db = new DataBaseHandler(getActivity(),ToDoListActivity.newInstance().receivedId);
-        db.openDatabase();
         newTaskText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -91,22 +74,15 @@ public class AddNewTask extends BottomSheetDialogFragment
 
             }
         });
-        final boolean finalIsUpdate = isUpdate;
         newTaskSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(Tag,"Save New Task Parent");
                 String text = newTaskText.getText().toString();
-                if(finalIsUpdate)
-                {
-                    db.UpdateTask(bundle.getInt("id"),text);
-                }
-                else
-                {
-                    ToDoModel task = new ToDoModel();
-                    task.setTask(text);
-                    task.setStatus(0);
-                    db.insertTask(task);
-                }
+                SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
+                int saveId = saveManager.GetCurrentTaskParentId();
+                saveManager.SaveTaskParent(saveId,text);
+                saveManager.GainCurrentTaskParentId();
                 dismiss();
             }
         });
