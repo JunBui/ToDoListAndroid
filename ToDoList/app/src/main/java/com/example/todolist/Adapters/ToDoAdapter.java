@@ -95,6 +95,10 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ViewHolder> {
     public void SetTask(List<ToDoModel> toDoModelList)
     {
         this.toDoModelList = toDoModelList;
+        for(int i = 0; i< toDoModelList.size();i++)
+        {
+            Log.i("To do adapter","task name: " + this.toDoModelList.get(i).getTask());
+        }
         notifyDataSetChanged();
     }
     public void  DeleteItemWithDialog(int position)

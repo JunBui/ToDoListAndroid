@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.todolist.MainActivity;
 import com.example.todolist.Models.ToDoModel;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 public class DataBaseHandler extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String Name = "toDoListDatabase";
-    private String TODO_TABLE = "todoTable_";
+    public String TODO_TABLE = "todoTable_";
     public int TODO_TABLE_Id=0;
     private static final String ID = "id";
     private static final String TASK = "task";
@@ -59,6 +61,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         cv.put(TASK, task.getTask());
         cv.put(STATUS, 0);
         db.insert(TODO_TABLE, null, cv);
+        Log.i("Add new task","Table: " + TODO_TABLE);
     }
     private int GetColumnIndex(Cursor cursor,String name)
     {
@@ -68,7 +71,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
     public List<ToDoModel> GetAllTasks()
     {
-        onUpgrade(db,db.getVersion(),db.getVersion()+1);
         List<ToDoModel> taskList = new ArrayList<>();
         Cursor cur = null;
         db.beginTransaction();
@@ -94,6 +96,12 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             assert cur != null;
             cur.close();
         }
+        Log.i("data base get all task","task size: " + taskList.size());
+
+        for(int i = 0; i< taskList.size();i++)
+        {
+            Log.i("data base get all task","task name: " + taskList.get(i).getTask());
+        }
         return taskList;
     }
     public void UpdateStatus(int id, int status)
@@ -112,11 +120,18 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     {
         db.delete(TODO_TABLE,ID + "= ?",new String[]{String.valueOf(id)});
     }
-//    public void createTableIfNotExists() {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        CREATE_TODO_TABLE = "CREATE TABLE " + TODO_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TASK + " TEXT, "
-//                + STATUS + " INTEGER)";
-//        db.execSQL(CREATE_TODO_TABLE);
-//    }
+    public boolean doesDatabaseExist(Context context, String dbName) {
+        SQLiteDatabase checkDB = null;
+        try {
+            String dbPath = context.getDatabasePath(dbName).getPath();
+            checkDB = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY);
+        } catch (SQLiteException e) {
+            // Database doesn't exist
+        } finally {
+            if (checkDB != null) {
+                checkDB.close();
+            }
+        }
+        return checkDB != null;
+    }
 }

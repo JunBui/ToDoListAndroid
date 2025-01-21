@@ -38,7 +38,7 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstance)
     {
-        View view = inflater.inflate(R.layout.new_task, container,false);
+        View view = inflater.inflate(R.layout.new_task_parent, container,false);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return view;
     }
@@ -46,8 +46,8 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        newTaskText = getView().findViewById(R.id.newTaskText);
-        newTaskSaveButton = getView().findViewById(R.id.newTaskButton);
+        newTaskText = getView().findViewById(R.id.newTaskTextParent);
+        newTaskSaveButton = getView().findViewById(R.id.newTaskButtonParent);
 
         newTaskText.addTextChangedListener(new TextWatcher() {
             @Override

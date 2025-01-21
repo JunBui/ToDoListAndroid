@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -89,15 +91,14 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         taskAdapter = new ToDoAdapter(db,this);
-        taskRecyclerView.setAdapter(taskAdapter);
 
         taskList = db.GetAllTasks();
-        Collections.reverse(taskList);
         taskAdapter.SetTask(taskList);
+        taskRecyclerView.setAdapter(taskAdapter);
         AddTaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                AddNewTask.newInstance().show(getSupportFragmentManager(),AddNewTask.Tag);
+                AddNewTask.newInstance(receivedId).show(getSupportFragmentManager(),AddNewTask.Tag);
             }
         });
     }
@@ -116,8 +117,8 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
     @Override
     public void handleDialogClose(DialogInterface dialog) {
         taskList = db.GetAllTasks();
-        Collections.reverse(taskList);
         taskAdapter.SetTask(taskList);
         taskAdapter.notifyDataSetChanged();
+        Log.i("To do list activity: ", "table when handle dialog close: " + db.TODO_TABLE);
     }
 }
