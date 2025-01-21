@@ -9,5 +9,6 @@
     <color name="gray">#858585</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
+    <color name="yellow_note">#FFDD73</color>
     <color name="colorPrimaryDark">@android:color/holo_blue_dark</color>
 </resources>
