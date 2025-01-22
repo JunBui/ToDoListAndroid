@@ -76,6 +76,10 @@ public class SaveManager {
     {
         saveString("taskParentName_"+id,name);
     }
+    public void SaveNote(int id, String name)
+    {
+        saveString("note_"+id,name);
+    }
     public void SaveTaskParentModifyTime(int id)
     {
         LocalDate currentDate = LocalDate.now();
@@ -91,6 +95,22 @@ public class SaveManager {
     {
         String taskParentName = getString("taskParentName_"+id,"");
         return taskParentName;
+    }
+    public String GetNote(int id)
+    {
+        String taskParentName = getString("note_"+id,"");
+        return taskParentName;
+    }
+    public ToDoParentList.TaskParentType GetTaskParentType(int id)
+    {
+        String enumName = getString("taskParentType_"+id,"");
+        ToDoParentList.TaskParentType taskParentName = ToDoParentList.TaskParentType.valueOf(enumName);
+        return taskParentName;
+    }
+    public void SaveTaskParentType(int id, ToDoParentList.TaskParentType taskParentType)
+    {
+        String enumString = taskParentType.name();
+        saveString("taskParentType_"+id,enumString);
     }
     public String GetTaskParentModifyTime(int id)
     {
@@ -108,6 +128,7 @@ public class SaveManager {
         for (int i = 0; i<GetCurrentTaskParentId();i++)
         {
             ToDoParentList parentName = new ToDoParentList(i,
+                    instance.GetTaskParentType(i),
                     instance.GetTaskParentName(i),
                     instance.GetTaskParentModifyTime(i),
                     instance.GetTaskParentIsCompleted(i));

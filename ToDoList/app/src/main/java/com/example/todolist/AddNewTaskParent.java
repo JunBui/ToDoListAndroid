@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.example.todolist.Interface.DialogCloseListener;
+import com.example.todolist.Models.ToDoParentList;
 import com.example.todolist.Utils.DataBaseHandler;
 import com.example.todolist.Utils.MyApplication;
 import com.example.todolist.Utils.SaveManager;
@@ -28,6 +31,7 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
     public static final String Tag = "ActionBottomDialogNewTaskParent";
     private EditText newTaskText;
     private Button newTaskSaveButton;
+    private Button newNoteSaveButton;
     public static AddNewTaskParent newInstance()
     {
         return new AddNewTaskParent();
@@ -51,6 +55,7 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
         super.onViewCreated(view, savedInstanceState);
         newTaskText = getView().findViewById(R.id.newTaskTextParent);
         newTaskSaveButton = getView().findViewById(R.id.newTaskButtonParent);
+        newNoteSaveButton = getView().findViewById(R.id.newNoteButtonParent);
 
         newTaskText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -80,17 +85,41 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
         newTaskSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String text = newTaskText.getText().toString();
-                SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
-                int saveId = saveManager.GetCurrentTaskParentId();
-                saveManager.SaveTaskParentName(saveId,text);
-                saveManager.SaveTaskParentModifyTime(saveId);
-                db = new DataBaseHandler(MyApplication.getAppContext(),saveId);
-                db.CheckExistAndCreateNewTable(saveId);
-                saveManager.GainCurrentTaskParentId();
-                dismiss();
+                OnClickNewTaskParent();
             }
         });
+        newNoteSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnClickNewNoteParent();
+            }
+        });
+    }
+    private void OnClickNewTaskParent()
+    {
+        ToDoParentList.TaskParentType taskParentType = ToDoParentList.TaskParentType.task;
+        String text = newTaskText.getText().toString();
+        SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
+        int saveId = saveManager.GetCurrentTaskParentId();
+        saveManager.SaveTaskParentName(saveId,text);
+        saveManager.SaveTaskParentModifyTime(saveId);
+        saveManager.SaveTaskParentType(saveId,taskParentType);
+        db = new DataBaseHandler(MyApplication.getAppContext(),saveId);
+        db.CheckExistAndCreateNewTable(saveId);
+        saveManager.GainCurrentTaskParentId();
+        dismiss();
+    }
+    private void OnClickNewNoteParent()
+    {
+        ToDoParentList.TaskParentType taskParentType = ToDoParentList.TaskParentType.note;
+        String text = newTaskText.getText().toString();
+        SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
+        int saveId = saveManager.GetCurrentTaskParentId();
+        saveManager.SaveTaskParentName(saveId,text);
+        saveManager.SaveTaskParentModifyTime(saveId);
+        saveManager.SaveTaskParentType(saveId,taskParentType);
+        saveManager.GainCurrentTaskParentId();
+        dismiss();
     }
 
     @Override

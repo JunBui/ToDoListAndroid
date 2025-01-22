@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todolist.Activity.MainActivity;
+import com.example.todolist.Activity.NoteActivity;
 import com.example.todolist.R;
 import com.example.todolist.Activity.ToDoListActivity;
 import com.example.todolist.Models.ToDoParentList;
@@ -42,27 +43,42 @@ public class TaskParentAdapter extends RecyclerView.Adapter<TaskParentAdapter.Vi
         {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mainActivity, ToDoListActivity.class);
+                Intent intent = new Intent();
+                switch (item.Type)
+                {
+                    case task:
+                        intent = new Intent(mainActivity, ToDoListActivity.class);
+                        break;
+                    case note:
+                        intent = new Intent(mainActivity, NoteActivity.class);
+                        break;
+                }
                 intent.putExtra("KEY_Id", item.id);
                 mainActivity.startActivity(intent);
             }
         });
         holder.taskText.setText(item.Text);
         holder.taskModifyDateText.setText(item.ModifyTime);
-        OnTaskParentUiChange(holder,item.IsCompleted);
+        OnTaskParentUiChange(holder,item.IsCompleted,item.Type);
     }
 
-    private void OnTaskParentUiChange(ViewHolder holder, boolean enable)
+    private void OnTaskParentUiChange(ViewHolder holder, boolean enable, ToDoParentList.TaskParentType type)
     {
         if(enable)
         {
-            holder.taskCompletedImage.setVisibility(View.VISIBLE);
             holder.taskText.setPaintFlags(holder.taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
         else
         {
-            holder.taskCompletedImage.setVisibility(View.INVISIBLE);
             holder.taskText.setPaintFlags(0);
+        }
+        if(type == ToDoParentList.TaskParentType.task)
+        {
+            holder.taskCompletedImage.setVisibility((enable)?View.VISIBLE:View.INVISIBLE);
+        }
+        else
+        {
+            holder.taskCompletedImage.setVisibility(View.INVISIBLE);
         }
     }
     public int getItemCount()
