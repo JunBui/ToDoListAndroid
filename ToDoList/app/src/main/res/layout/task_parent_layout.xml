@@ -30,7 +30,7 @@
         </ImageView>
 
         <TextView
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="45dp"
             android:id="@+id/taskParentText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

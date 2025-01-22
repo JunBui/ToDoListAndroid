@@ -80,6 +80,10 @@ public class SaveManager {
     {
         saveString("note_"+id,name);
     }
+    public void SaveNoteColorCode(int id, String code)
+    {
+        saveString("noteColor_"+id,code);
+    }
     public void SaveTaskParentModifyTime(int id)
     {
         LocalDate currentDate = LocalDate.now();
@@ -100,6 +104,11 @@ public class SaveManager {
     {
         String taskParentName = getString("note_"+id,"");
         return taskParentName;
+    }
+    public String GetColorCode(int id)
+    {
+        String color = getString("noteColor_"+id,"#FFFF00");
+        return color;
     }
     public ToDoParentList.TaskParentType GetTaskParentType(int id)
     {

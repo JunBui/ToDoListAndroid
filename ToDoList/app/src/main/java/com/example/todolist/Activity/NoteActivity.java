@@ -2,6 +2,7 @@ package com.example.todolist.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -116,10 +117,18 @@ public class NoteActivity extends AppCompatActivity {
     {
         String savedText = SaveManager.getInstance(MyApplication.getAppContext()).GetNote(receivedId); // Default value is an empty string
         Notes.setText(savedText);
+        String savedColor = SaveManager.getInstance(MyApplication.getAppContext()).GetColorCode(receivedId); // Default value is an empty string
+
+        Notes.setBackgroundColor(Color.parseColor(savedColor));
     }
     private void SaveNote()
     {
         SaveManager.getInstance(MyApplication.getAppContext())
                 .SaveNote(receivedId,Notes.getText().toString());
+    }
+    private void SaveNoteColor(Color color)
+    {
+        SaveManager.getInstance(MyApplication.getAppContext())
+                .SaveNoteColorCode(receivedId,String.format("#%02x%02x%02x", color.red(), color.green(), color.blue()));
     }
 }
