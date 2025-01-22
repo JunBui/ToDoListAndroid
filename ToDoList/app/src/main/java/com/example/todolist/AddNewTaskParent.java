@@ -2,6 +2,7 @@ package com.example.todolist;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.example.todolist.Activity.MainActivity;
+import com.example.todolist.Activity.NoteActivity;
+import com.example.todolist.Activity.ToDoListActivity;
 import com.example.todolist.Interface.DialogCloseListener;
 import com.example.todolist.Models.ToDoParentList;
 import com.example.todolist.Utils.DataBaseHandler;
@@ -68,12 +72,16 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
                 if(charSequence.toString().equals(""))
                 {
                     newTaskSaveButton.setEnabled(false);
+                    newNoteSaveButton.setEnabled(false);
                     newTaskSaveButton.setTextColor(Color.GRAY);
+                    newNoteSaveButton.setTextColor(Color.GRAY);
                 }
                 else
                 {
                     newTaskSaveButton.setEnabled(true);
+                    newNoteSaveButton.setEnabled(true);
                     newTaskSaveButton.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
+                    newNoteSaveButton.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
                 }
             }
 
@@ -108,6 +116,7 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
         db.CheckExistAndCreateNewTable(saveId);
         saveManager.GainCurrentTaskParentId();
         dismiss();
+        LoadActivity(taskParentType,saveId);
     }
     private void OnClickNewNoteParent()
     {
@@ -120,6 +129,22 @@ public class AddNewTaskParent extends BottomSheetDialogFragment
         saveManager.SaveTaskParentType(saveId,taskParentType);
         saveManager.GainCurrentTaskParentId();
         dismiss();
+        LoadActivity(taskParentType,saveId);
+    }
+    private void LoadActivity(ToDoParentList.TaskParentType Type, int id)
+    {
+        Intent intent = new Intent();
+        switch (Type)
+        {
+            case task:
+                intent = new Intent(this.getContext(), ToDoListActivity.class);
+                break;
+            case note:
+                intent = new Intent(this.getContext(), NoteActivity.class);
+                break;
+        }
+        intent.putExtra("KEY_Id", id);
+        startActivity(intent);
     }
 
     @Override

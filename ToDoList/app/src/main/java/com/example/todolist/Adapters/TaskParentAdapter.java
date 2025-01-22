@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todolist.Activity.MainActivity;
@@ -75,10 +76,12 @@ public class TaskParentAdapter extends RecyclerView.Adapter<TaskParentAdapter.Vi
         if(type == ToDoParentList.TaskParentType.task)
         {
             holder.taskCompletedImage.setVisibility((enable)?View.VISIBLE:View.INVISIBLE);
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.baseline_check_box));
         }
         else
         {
             holder.taskCompletedImage.setVisibility(View.INVISIBLE);
+            holder.icon.setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.baseline_edit_note));
         }
     }
     public int getItemCount()
@@ -99,6 +102,7 @@ public class TaskParentAdapter extends RecyclerView.Adapter<TaskParentAdapter.Vi
         TextView taskText;
         TextView taskModifyDateText;
         ImageView taskCompletedImage;
+        ImageView icon;
         ViewHolder(View view)
         {
             super(view);
@@ -106,6 +110,7 @@ public class TaskParentAdapter extends RecyclerView.Adapter<TaskParentAdapter.Vi
             taskText = view.findViewById(R.id.taskParentText);
             taskModifyDateText = view.findViewById(R.id.taskModifyDateText);
             taskCompletedImage = view.findViewById(R.id.taskCompletedImage);
+            icon = view.findViewById(R.id.taskParentIcon);
         }
     }
 }

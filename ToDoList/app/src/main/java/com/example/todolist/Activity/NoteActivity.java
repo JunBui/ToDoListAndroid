@@ -31,6 +31,7 @@ public class NoteActivity extends AppCompatActivity {
     private EditText Notes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
         InitData();
