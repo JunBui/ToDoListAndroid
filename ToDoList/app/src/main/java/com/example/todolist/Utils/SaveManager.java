@@ -3,6 +3,8 @@ package com.example.todolist.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.todolist.Models.ToDoParentList;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -83,7 +85,7 @@ public class SaveManager {
     }
     public void SaveTaskParentCompleted(int id,boolean completed)
     {
-        saveBoolean("taskParentIsCompleted"+id,completed);
+        saveBoolean("taskParentIsCompleted_"+id,completed);
     }
     public String GetTaskParentName(int id)
     {
@@ -97,7 +99,7 @@ public class SaveManager {
     }
     public boolean GetTaskParentIsCompleted(int id)
     {
-        boolean taskParentIsCompleted = getBoolean("taskParentIsCompleted"+id,false);
+        boolean taskParentIsCompleted = getBoolean("taskParentIsCompleted_"+id,false);
         return taskParentIsCompleted;
     }
     public List<ToDoParentList> GetAllTask()

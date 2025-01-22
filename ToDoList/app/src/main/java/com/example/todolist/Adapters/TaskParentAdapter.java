@@ -4,22 +4,19 @@ package com.example.todolist.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todolist.MainActivity;
+import com.example.todolist.Activity.MainActivity;
 import com.example.todolist.R;
-import com.example.todolist.ToDoListActivity;
-import com.example.todolist.Utils.ToDoParentList;
+import com.example.todolist.Activity.ToDoListActivity;
+import com.example.todolist.Models.ToDoParentList;
 
 import java.util.List;
 
@@ -57,13 +54,14 @@ public class TaskParentAdapter extends RecyclerView.Adapter<TaskParentAdapter.Vi
 
     private void OnTaskParentUiChange(ViewHolder holder, boolean enable)
     {
-        holder.taskCompletedImage.setEnabled(enable);
         if(enable)
         {
+            holder.taskCompletedImage.setVisibility(View.VISIBLE);
             holder.taskText.setPaintFlags(holder.taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
         else
         {
+            holder.taskCompletedImage.setVisibility(View.INVISIBLE);
             holder.taskText.setPaintFlags(0);
         }
     }

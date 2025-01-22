@@ -16,8 +16,8 @@ import android.widget.ImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todolist.MyApplication;
-import com.example.todolist.ToDoListActivity;
+import com.example.todolist.Utils.MyApplication;
+import com.example.todolist.Activity.ToDoListActivity;
 import com.example.todolist.Models.ToDoModel;
 import com.example.todolist.R;
 import com.example.todolist.AddNewTask;

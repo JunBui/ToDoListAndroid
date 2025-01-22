@@ -1,9 +1,8 @@
-package com.example.todolist;
+package com.example.todolist.Activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,19 +13,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todolist.Adapters.ToDoAdapter;
+import com.example.todolist.AddNewTask;
+import com.example.todolist.Interface.DialogCloseListener;
 import com.example.todolist.Models.ToDoModel;
+import com.example.todolist.Utils.MyApplication;
+import com.example.todolist.R;
 import com.example.todolist.Utils.DataBaseHandler;
 import com.example.todolist.Utils.SaveManager;
 
-import java.util.Collections;
 import java.util.List;
 
-public class ToDoListActivity extends AppCompatActivity implements DialogCloseListener{
+public class ToDoListActivity extends AppCompatActivity implements DialogCloseListener {
 
     private Button AddTaskButton;
     private ImageButton BackButton;
@@ -40,18 +41,27 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.to_do_list_activity);
+        getSupportActionBar().hide();
+        InitData();
+        InitUi();
+    }
+    private void InitData()
+    {
         Intent intent = getIntent();
         receivedId = intent.getIntExtra("KEY_Id", 0);
         db = new DataBaseHandler(this,receivedId);
         db.openDatabase();
+        taskAdapter = new ToDoAdapter(db,this);
+        taskList = db.GetAllTasks();
+        taskAdapter.SetTask(taskList);
+    }
+    private void InitUi()
+    {
         BackButton = findViewById(R.id.backButtonToDoList);
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an Intent to navigate to SecondActivity
-                Context ToDoListActivity = com.example.todolist.ToDoListActivity.this;
-                Intent intent = new Intent(ToDoListActivity, MainActivity.class);
-                startActivity(intent);
+                OnClickBack();
             }
         });
 
@@ -78,17 +88,10 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
                 SaveTitle();
             }
         });
-
         LoadTitle();
-        getSupportActionBar().hide();
         AddTaskButton = findViewById(R.id.addTaskButton);
         taskRecyclerView = findViewById(R.id.taskRecycleView);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        taskAdapter = new ToDoAdapter(db,this);
-
-        taskList = db.GetAllTasks();
-        taskAdapter.SetTask(taskList);
         taskRecyclerView.setAdapter(taskAdapter);
         AddTaskButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -97,12 +100,17 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
             }
         });
     }
+    private void OnClickBack()
+    {
+        Context ToDoListActivity = com.example.todolist.Activity.ToDoListActivity.this;
+        Intent intent = new Intent(ToDoListActivity, MainActivity.class);
+        startActivity(intent);
+    }
 
     private void LoadTitle()
     {
         String savedText = SaveManager.getInstance(MyApplication.getAppContext()).GetTaskParentName(receivedId); // Default value is an empty string
         ToDoListTitle.setText(savedText);
-
     }
     private void SaveTitle()
     {
@@ -120,13 +128,14 @@ public class ToDoListActivity extends AppCompatActivity implements DialogCloseLi
     {
         SaveManager saveManager = SaveManager.getInstance(MyApplication.getAppContext());
         taskList = db.GetAllTasks();
+        Log.i("Check All Item", "task Parent Name " + receivedId);
         for (ToDoModel n1: taskList) {
+            Log.i("Check All Item", "task Name " + n1.getTask() + " status: " + n1.getStatus());
             if (n1.getStatus() == 0) {
                 saveManager.SaveTaskParentCompleted(receivedId,false);
                 return;
             }
         }
-
         saveManager.SaveTaskParentCompleted(receivedId,true);
     }
 }

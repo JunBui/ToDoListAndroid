@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.example.todolist.Interface;
 
 import android.content.DialogInterface;
 

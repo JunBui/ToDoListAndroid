@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.example.todolist.Interface.DialogCloseListener;
 import com.example.todolist.Utils.DataBaseHandler;
+import com.example.todolist.Utils.MyApplication;
 import com.example.todolist.Utils.SaveManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class AddNewTaskParent extends BottomSheetDialogFragment
 {
